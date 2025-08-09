@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -xe
+as -o fib.o fib.s
+ld fib.o -o fib
