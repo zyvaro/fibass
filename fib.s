@@ -2,6 +2,13 @@
 buffer: .space 256
 buffer_size: .space 4
 
+.section .data
+hello:
+	.ascii "hello, world\n"
+hello_len = . - hello
+
+x: .4byte 6
+
 .section .text
 .global _start
 _start:
@@ -23,8 +30,3 @@ _start:
 	mov $0, %rdi
 	syscall
 
-hello:
-	.ascii "hello, world\n"
-hello_len = . - hello
-
-x: .4byte 6
