@@ -3,6 +3,12 @@
 _start:
 	mov $1, %rax
 	mov $1, %rdi
+	movq $some_len, %rsi
+	mov $4, %rdx
+	syscall
+
+	mov $1, %rax
+	mov $1, %rdi
 	mov $hello, %rsi
 	mov $hello_len, %rdx
 	syscall
@@ -14,3 +20,6 @@ _start:
 hello:
 	.ascii "hello, world\n"
 hello_len = . - hello
+
+some_len:
+	.byte 69, 10, 0
