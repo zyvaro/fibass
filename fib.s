@@ -1,32 +1,22 @@
-.section .bss
-buffer: .space 256
-buffer_size: .space 4
-
-.section .data
-hello:
-	.ascii "hello, world\n"
-hello_len = . - hello
-
-x: .4byte 6
-
-.section .text
 .global _start
 _start:
-	mov x(%rip), %rbx
-	add $48, %rbx
-	mov %rbx, buffer
-	addl $1, buffer_size
-	movq $10, buffer + 1
-	addl $1, buffer_size
-	movq $0, buffer + 2
-
+	mov $0, %r15
+	jmp .L2
+.L3:
 	mov $1, %rax
 	mov $1, %rdi
-	lea buffer, %rsi
-	lea buffer_size, %rdx
+	lea hello(%rip), %rsi
+	mov $13, %rdx
 	syscall
+	add $1, %r15
+.L2:
+	cmp $9, %r15
+	jle .L3
 
 	mov $60, %rax
 	mov $0, %rdi
 	syscall
 
+.section .data
+hello:
+	.string "hello, world\n"
