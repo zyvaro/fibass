@@ -33,9 +33,52 @@ print_number:
 	popq %rbp
 	ret
 
+fib:
+	pushq %rbp
+	movq %rsp, %rbp
+	movl %edi, -4(%rbp)
+	movl -4(%rbp), %eax
+
+	cmpl $0, %eax
+	jz .fib_0
+	cmpl $1, %eax
+	jle .fib_0
+	
+	subq $16, %rsp
+	movl $0, -12(%rbp) # First
+	movl $1, -16(%rbp) # Second
+	movl $1, -20(%rbp) # Nth
+	movl $2, -24(%rbp) # int i = 2
+	jmp .fib_L1
+.fib_L0:
+	movl -12(%rbp), %ebx # Move first into register
+	addl -16(%rbp), %ebx # Add it with second
+	movl %ebx, -20(%rbp) # update nth = first + second
+	# update first = second
+	movl -16(%rbp), %ebx
+	movl %ebx, -12(%rbp) 
+	# update second = nth
+	movl -20(%rbp), %ebx
+	movl %ebx, -16(%rbp)
+	addl $1, -24(%rbp) 
+.fib_L1:
+	cmpl %eax, -24(%rbp)
+	jle .fib_L0
+
+	movl -20(%rbp), %eax
+	addq $16, %rsp
+	popq %rbp
+	retq
+.fib_0:
+	popq %rbp
+	retq
+
 .global _start
 _start:
-	movl $4096, %edi
+	movl $6, %edi
+	call fib
+	
+	movl %eax, %edi
 	call print_number
 
 	mov $60, %rax
